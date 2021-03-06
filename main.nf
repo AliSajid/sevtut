@@ -34,6 +34,10 @@ if (params.help) {
 
 process runBlast{
 
+output:
+publishDir "${params.outdir}/blastout"
+path(params.outFileName)
+
 script:
 """
 $params.app  -num_threads $params.threads -db $params.dbDir/$params.dbName -query $params.query -outfmt $params.outfmt $params.options -out $params.outFileName
