@@ -34,7 +34,7 @@ if (params.help) {
 
 Channel
       .fromPath(params.query)
-      .splitFasta(by: 1, file: true)
+      .splitFasta(by: params.chunkSize, file: true)
       .set { queryFile_ch }
 
 process runBlast{
