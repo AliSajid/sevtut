@@ -34,7 +34,7 @@ if (params.help) {
 
 Channel
       .fromPath(params.query)
-      .into { queryFile_ch }
+      .set { queryFile_ch }
 
 process runBlast{
 
