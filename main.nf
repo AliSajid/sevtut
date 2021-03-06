@@ -32,7 +32,15 @@ if (params.help) {
     exit 0
 }
 
+Channel
+      .fromPath(params.query)
+      .into { queryFile_ch }
+
 process runBlast{
+
+
+input:
+path(queryFile) from queryFile_ch
 
 output:
 publishDir "${params.outdir}/blastout"
@@ -40,6 +48,6 @@ path(params.outFileName)
 
 script:
 """
-$params.app  -num_threads $params.threads -db $params.dbDir/$params.dbName -query $params.query -outfmt $params.outfmt $params.options -out $params.outFileName
+$params.app  -num_threads $params.threads -db $params.dbDir/$params.dbName -query $queryFile -outfmt $params.outfmt $params.options -out $params.outFileName
 """
 }
