@@ -34,6 +34,7 @@ if (params.help) {
 
 Channel
       .fromPath(params.query)
+      .splitFasta(by: 1, file: true)
       .set { queryFile_ch }
 
 process runBlast{
@@ -43,11 +44,13 @@ input:
 path(queryFile) from queryFile_ch
 
 output:
-publishDir "${params.outdir}/blastout"
-path(params.outFileName)
+path(params.outFileName) into blast_output_ch
 
 script:
 """
 $params.app  -num_threads $params.threads -db $params.dbDir/$params.dbName -query $queryFile -outfmt $params.outfmt $params.options -out $params.outFileName
 """
 }
+
+blast_output_ch
+.collectFile(name: 'blast_output_combined.txt', storeDir: params.outdir)
