@@ -33,6 +33,14 @@ if (params.help) {
 }
 
 Channel
+      .fromPath(params.dbDir)
+      .set{dbDir_ch}
+
+Channel
+   .from(params.dbName)
+   .set{dbName_ch}
+
+Channel
       .fromPath(params.query)
       .splitFasta(by: params.chunkSize, file: true)
       .set { queryFile_ch }
@@ -42,6 +50,8 @@ process runBlast{
 container = 'ncbi/blast'
 
 input:
+path dbDir  from dbDir_ch
+val dbName  from dbName_ch
 path(queryFile) from queryFile_ch
 
 output:
@@ -50,7 +60,7 @@ path(params.outFileName) into blast_output_ch
 
 script:
 """
-$params.app  -num_threads $params.threads -db $params.dbDir/$params.dbName -query $queryFile -outfmt $params.outfmt $params.options -out $params.outFileName
+$params.app  -num_threads $params.threads -db $dbDir/$dbName -query $queryFile -outfmt $params.outfmt $params.options -out $params.outFileName
 """
 }
 
