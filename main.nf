@@ -39,11 +39,13 @@ Channel
 
 process runBlast{
 
+container = 'ncbi/blast'
 
 input:
 path(queryFile) from queryFile_ch
 
 output:
+publishDir "${params.outdir}/blastout"
 path(params.outFileName) into blast_output_ch
 
 script:
