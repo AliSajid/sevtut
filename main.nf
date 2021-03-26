@@ -50,8 +50,8 @@ process runBlast{
 container = 'ncbi/blast'
 
 input:
-path dbDir  from dbDir_ch
-val dbName  from dbName_ch
+path dbDir  from dbDir_ch.val
+val dbName  from dbName_ch.val
 path(queryFile) from queryFile_ch
 
 output:
